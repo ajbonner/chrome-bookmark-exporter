@@ -12,19 +12,23 @@ function loadExternalCss(src) {
   document.getElementsByTagName("head")[0].appendChild(style);
 }
 
-function walkBookmarkTree(nodeTreeList)
-{
+function walkBookmarkTree(nodeTreeList) {
   for (var i = 0; i < nodeTreeList.length; i++) {
     if (nodeTreeList[i].url != undefined) {
-      $('#content').append('<div class="bookmark-row">' + nodeTreeList[i].url + '</div>') 
+      exportBookmark(nodeTreeList[i]);
     }
-    if (nodeTreeList[i].children != undefined) {
+    if (nodeTreeList[i].children != undefined 
+        && nodeTreeList[i].children.length > 0) {
       walkBookmarkTree(nodeTreeList[i].children);
     }
   }
 }
 
+function exportBookmark(node) {
+  $('#content').append('<div class="bookmark-row">' + node.url + '</div>'); 
+}
+  
+
 $(function() {
-  console.debug('Document is ready, yo.');
   chrome.bookmarks.getTree(walkBookmarkTree);
 });
